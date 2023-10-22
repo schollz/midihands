@@ -8,6 +8,7 @@ import (
 	"math"
 	"math/rand"
 	"net/http"
+	"os"
 	"os/exec"
 	"runtime"
 	"strings"
@@ -60,8 +61,10 @@ func main() {
 	var err error
 	flag.Parse()
 	log.SetLevel("info")
+	flagDebug=true
 	if flagDebug {
 		log.SetLevel("debug")
+		flagDontOpen = true
 	}
 	fmt.Print(`
 midihands v0.1
@@ -115,7 +118,11 @@ midihands v0.1
 		return
 	}
 
-	fsStatic = http.FileServer(http.FS(fsRoot))
+	if flagDebug {
+		fsStatic = http.FileServer(http.Dir("static"))
+	} else {
+		fsStatic = http.FileServer(http.FS(fsRoot))
+	}
 	log.Debugf("listening on :%d", flagPort)
 	if !flagDontOpen {
 		go func() {
@@ -153,12 +160,20 @@ func handle(w http.ResponseWriter, r *http.Request) (err error) {
 		var b []byte
 		if r.URL.Path == "/" {
 			log.Debug("loading index")
-			b, err = static.ReadFile("static/hands.html")
+			if flagDebug {
+				b, err = os.ReadFile("static/hands.html")
+			} else {
+				b, err = static.ReadFile("static/hands.html")
+			}
 			if err != nil {
 				return
 			}
 		} else {
-			b, err = static.ReadFile("static" + r.URL.Path)
+			if flagDebug {
+				b, err = os.ReadFile("static" + r.URL.Path)
+			} else {
+				b, err = static.ReadFile("static" + r.URL.Path)
+			}
 			if err != nil {
 				return
 			}

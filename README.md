@@ -4,6 +4,14 @@
 
 you need a "virtual midi port". here's how to get one in ableton: https://help.ableton.com/hc/en-us/articles/209774225-Setting-up-a-virtual-MIDI-bus#Windows
 
+## linux
+
+Install `portmidi`:
+
+```
+sudo apt install libportmidi-dev
+```
+
 ## windows build:
 
 First [install msys2](https://www.msys2.org/). to C:\
