@@ -1,1 +1,22 @@
 # midihands
+
+## ableton setup
+
+you need a "virtual midi port". here's how to get one in ableton: https://help.ableton.com/hc/en-us/articles/209774225-Setting-up-a-virtual-MIDI-bus#Windows
+
+## windows build:
+
+install msys2 to C:\ and in msys2 run
+
+```bash
+pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-portmidi
+```
+
+whenever you build, make sure to enable these:
+```powershell
+$env:CGO_ENABLED="1"
+$env:CC="x86_64-w64-mingw32-gcc"
+$env:CGO_CFLAGS = "-IC:\msys64\mingw64\include"
+$env:CGO_LDFLAGS = "-LC:\msys64\mingw64\lib"
+$env:PATH += ";C:\msys64\usr\bin;C:\msys64\mingw64\bin"
+```
